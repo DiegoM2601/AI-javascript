@@ -5,6 +5,17 @@ class Car {
     this.y = y;
     this.width = width;
     this.height = height;
+
+    this.controls = new Controls();
+  }
+
+  actualizar() {
+    if (this.controls.adelante) {
+      this.y -= 2;
+    }
+    if (this.controls.reversa) {
+      this.y += 2;
+    }
   }
 
   dibujar(ctx) {
@@ -14,5 +25,3 @@ class Car {
     ctx.fill();
   }
 }
-
-//(100 - 30) / 2
