@@ -11,7 +11,7 @@ const carro = new Car(camino.obtenerCentroCarril(1), 100, 30, 50);
 animar();
 
 function animar() {
-  carro.actualizar();
+  carro.actualizar(camino.bordes);
 
   lienzo.height = window.innerHeight;
 

@@ -16,9 +16,9 @@ class Car {
     this.controls = new Controls();
   }
 
-  actualizar() {
+  actualizar(bordesCamino) {
     this.#mover();
-    this.sensor.actualizar();
+    this.sensor.actualizar(bordesCamino);
   }
 
   #mover() {
