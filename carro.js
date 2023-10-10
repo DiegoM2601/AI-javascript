@@ -10,6 +10,7 @@ class Car {
     this.aceleracion = 0.2;
     this.velocidadMax = 3;
     this.friccion = 0.05;
+    this.angulo = 0;
 
     this.controls = new Controls();
   }
@@ -53,21 +54,36 @@ class Car {
       this.velocidad = 0;
     }
 
-    // *** DESPLAZMIENTO IZQUIERDA DERECHA
+    // *** DESPLAZMIENTO HORARIO Y ANTIHORARIO DEL CARRO
     if (this.controls.izquierda) {
-      this.x -= 2;
+      // this.x -= 2;
+      this.angulo += 0.03;
     }
     if (this.controls.derecha) {
-      this.x += 2;
+      // this.x += 2;
+      this.angulo -= 0.03;
     }
 
     this.y -= this.velocidad;
   }
 
   dibujar(ctx) {
+    //animar la rotación del vehículo
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(-this.angulo);
     ctx.beginPath();
-    //* En lugar de ubicar un punto en el plano cartesiano y dibujar a partir de él el rectángulo se opta por dibujar dicha figura alrededor del punto y por encima del mismo
-    ctx.rect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+
+    //prettier-ignore
+    ctx.rect(
+      -this.width / 2, 
+      -this.height / 2,
+      this.width,
+      this.height
+    );
+
     ctx.fill();
+
+    ctx.restore();
   }
 }
