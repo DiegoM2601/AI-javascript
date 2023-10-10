@@ -1,6 +1,6 @@
 class Road {
   //el camino estará centrado alrededor de una coordenada x, ancho específico y número de carriles
-  constructor(x, width, laneCount = 4) {
+  constructor(x, width, laneCount = 3) {
     this.x = x;
     this.width = width;
 
@@ -14,6 +14,14 @@ class Road {
     const infinito = 1000000;
     this.top = -infinito;
     this.bottom = infinito;
+  }
+
+  //para alinear el carro a uno de los carriles primero sera necesario determinar el índice del carril en el cuál se hallará el vehículo
+  obtenerCentroCarril(laneIndex) {
+    const laneWidth = this.width / this.laneCount;
+
+    //el calculo se hará partir del primer carril presente en la izquierda del camino a partir del cuál se calculará el centro de los carriles adyacentes
+    return this.left + laneWidth / 2 + Math.min(laneIndex, this.laneCount - 1) * laneWidth;
   }
 
   dibujar(ctx) {
