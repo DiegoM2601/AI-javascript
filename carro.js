@@ -16,6 +16,10 @@ class Car {
   }
 
   actualizar() {
+    this.#mover();
+  }
+
+  #mover() {
     if (this.controls.adelante) {
       // this.y -= 2;
       this.velocidad += this.aceleracion;
@@ -54,17 +58,28 @@ class Car {
       this.velocidad = 0;
     }
 
-    // *** DESPLAZMIENTO HORARIO Y ANTIHORARIO DEL CARRO
-    if (this.controls.izquierda) {
-      // this.x -= 2;
-      this.angulo += 0.03;
-    }
-    if (this.controls.derecha) {
-      // this.x += 2;
-      this.angulo -= 0.03;
+    /**
+     * En caso de que la velocidad sea un valor negativa, es decir, que el carro se desplaza en reversa los controles de dirección horizontal no deben alterarse. Por defecto, al momento de ir en reversa dichos controles se invierten de modo que será necesario revertirlos a objeto de que conserven la dirección de desplazamiento original.
+     */
+    //! el siguiente condicional sirve para rotar el carro solo cuando existe aceleración. En caso de que la velocidad sea cero el carro no rotará en lo absoluto
+    if (this.velocidad != 0) {
+      // revertir el ángulo de rotación del carro en reversa
+      const revertir = this.velocidad > 0 ? 1 : -1;
+
+      // *** DESPLAZMIENTO HORARIO Y ANTIHORARIO DEL CARRO
+      if (this.controls.izquierda) {
+        this.angulo += 0.03 * revertir;
+      }
+      if (this.controls.derecha) {
+        this.angulo -= 0.03 * revertir;
+      }
     }
 
-    this.y -= this.velocidad;
+    //* desplazamiento vertical dependiente del ángulo de rotación del vehículo
+    this.x -= Math.sin(this.angulo) * this.velocidad;
+    this.y -= Math.cos(this.angulo) * this.velocidad;
+
+    // this.y -= this.velocidad;
   }
 
   dibujar(ctx) {

@@ -28,7 +28,7 @@ class Controls {
           this.reversa = true;
           break;
       }
-      console.table(this);
+      // console.table(this);
     };
 
     //! escuchar cuando la tecla ha sido liberada o el usuario a dejado de presionarla
@@ -47,7 +47,7 @@ class Controls {
           this.reversa = false;
           break;
       }
-      console.table(this);
+      // console.table(this);
     };
   }
 }
