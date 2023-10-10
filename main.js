@@ -15,7 +15,15 @@ function animar() {
   carro.actualizar();
 
   lienzo.height = window.innerHeight;
+
+  ctx.save();
+
+  //! desplazamiento en tiempo real del lienzo y del punto origen sincronizado al desplazamiento del vehículo
+  ctx.translate(0, -carro.y + lienzo.height * 0.7);
+
   camino.dibujar(ctx);
   carro.dibujar(ctx);
+
+  ctx.restore();
   requestAnimationFrame(animar);
 }

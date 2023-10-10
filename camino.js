@@ -14,6 +14,16 @@ class Road {
     const infinito = 1000000;
     this.top = -infinito;
     this.bottom = infinito;
+
+    //definir bordes de colision
+    const topLeft = { x: this.left, y: this.top };
+    const topRight = { x: this.right, y: this.top };
+    const bottomLeft = { x: this.left, y: this.bottom };
+    const bottomRight = { x: this.right, y: this.bottom };
+    this.bordes = [
+      [topLeft, bottomLeft],
+      [topRight, bottomRight],
+    ];
   }
 
   //para alinear el carro a uno de los carriles primero sera necesario determinar el índice del carril en el cuál se hallará el vehículo
@@ -29,20 +39,23 @@ class Road {
     ctx.strokeStyle = "white";
 
     //calcular la dimension de los 3 carriles (laneCount) a traves del método de interpolación lineal
-    for (let i = 0; i <= this.laneCount; i++) {
+    for (let i = 1; i <= this.laneCount - 1; i++) {
       const x = interpolacionLineal(this.left, this.right, i / this.laneCount);
 
-      //unicamente las dos lineas de por medio se dibujarán entrecortadas o en línea discontinua (dashed lines)
-      if (i > 0 && i < this.laneCount) {
-        ctx.setLineDash([20, 20]);
-      } else {
-        ctx.setLineDash([]);
-      }
+      ctx.setLineDash([20, 20]);
 
       ctx.beginPath();
       ctx.moveTo(x, this.top);
       ctx.lineTo(x, this.bottom);
       ctx.stroke();
     }
+
+    ctx.setLineDash([]);
+    this.bordes.forEach((borde) => {
+      ctx.beginPath();
+      ctx.moveTo(borde[0].x, borde[0].y);
+      ctx.lineTo(borde[1].x, borde[1].y);
+      ctx.stroke();
+    });
   }
 }
