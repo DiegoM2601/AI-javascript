@@ -12,11 +12,13 @@ class Car {
     this.friccion = 0.05;
     this.angulo = 0;
 
+    this.sensor = new Sensor(this);
     this.controls = new Controls();
   }
 
   actualizar() {
     this.#mover();
+    this.sensor.actualizar();
   }
 
   #mover() {
@@ -100,5 +102,8 @@ class Car {
     ctx.fill();
 
     ctx.restore();
+
+    // el vehículo tendrá la responsabilidad de dibujar sus propios sensores
+    this.sensor.dibujar(ctx);
   }
 }
