@@ -13,23 +13,34 @@ class Car {
     this.angulo = 0;
     this.accidentado = false;
 
-    this.sensor = new Sensor(this);
+    //desactivar sensores laser en caso de que el vehiculo sea autonomo
+    if (tipoControl != "TRAFICO") {
+      this.sensor = new Sensor(this);
+    }
     this.controls = new Controls(tipoControl);
   }
 
-  actualizar(bordesCamino) {
+  actualizar(bordesCamino, trafico) {
     //! impedir que el vehículo siga desplazándose después de haber colisionado
     if (!this.accidentado) {
       this.#mover();
       this.poligono = this.#crearPoligono();
-      this.accidentado = this.#evaluarAccidente(bordesCamino);
+      this.accidentado = this.#evaluarAccidente(bordesCamino, trafico);
     }
-    this.sensor.actualizar(bordesCamino);
+
+    if (this.sensor) {
+      this.sensor.actualizar(bordesCamino, trafico);
+    }
   }
 
-  #evaluarAccidente(bordesCamino) {
+  #evaluarAccidente(bordesCamino, trafico) {
     for (let i = 0; i < bordesCamino.length; i++) {
       if (interseccionPoligono(this.poligono, bordesCamino[i])) {
+        return true;
+      }
+    }
+    for (let i = 0; i < trafico.length; i++) {
+      if (interseccionPoligono(this.poligono, trafico[i].poligono)) {
         return true;
       }
     }
@@ -129,11 +140,11 @@ class Car {
   }
 
   //FIXME: la propiedad poligono no se incluye en el constructor de la presente clase ?????
-  dibujar(ctx) {
+  dibujar(ctx, color) {
     if (this.accidentado) {
       ctx.fillStyle = "gray";
     } else {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
     }
 
     ctx.beginPath();
@@ -144,7 +155,9 @@ class Car {
     }
     ctx.fill();
 
-    // el vehículo tendrá la responsabilidad de dibujar sus propios sensores
-    this.sensor.dibujar(ctx);
+    if (this.sensor) {
+      // el vehículo tendrá la responsabilidad de dibujar sus propios sensores
+      this.sensor.dibujar(ctx);
+    }
   }
 }

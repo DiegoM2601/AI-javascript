@@ -9,7 +9,7 @@ class Controls {
       case "CONTROL":
         this.#addKeyboardListeners();
         break;
-      case "ESTATICO":
+      case "TRAFICO":
         // ! El carro que simula el tráfico conducirá hacia adelante de forma perpetua por defecto
         this.adelante = true;
         break;

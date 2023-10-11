@@ -17,17 +17,18 @@ class Sensor {
     this.lecturas = [];
   }
 
-  actualizar(bordesCamino) {
+  // a traves del parametro trafico los sensores laser serán capaces de detectar los vehículos presentes en la carretera de la misma forma en la cual detecta los bordes de la carretera
+  actualizar(bordesCamino, trafico) {
     this.#castRays();
     this.lecturas = [];
     for (let i = 0; i < this.rays.length; i++) {
-      this.lecturas.push(this.#obtenerLectura(this.rays[i], bordesCamino));
+      this.lecturas.push(this.#obtenerLectura(this.rays[i], bordesCamino, trafico));
     }
   }
 
   //detectar todos los contactos detectados por los sensores laser
   //mas especificamente contactos con los bordes de colision cada vez que de produce una interseccion entre los segmentos laser y los bordes de la carretera
-  #obtenerLectura(ray, bordesCamino) {
+  #obtenerLectura(ray, bordesCamino, trafico) {
     let contactos = [];
 
     for (let i = 0; i < bordesCamino.length; i++) {
@@ -35,6 +36,18 @@ class Sensor {
       //poblar el array contactos solo en caso de que exista alguna intersección
       if (contacto) {
         contactos.push(contacto);
+      }
+    }
+
+    //para que los sensore laser sean capaces de detectar los vehiculos presentes en la carretera antes será necesario conocer dónde exactamente se hallan los mismos
+    //de igual forma, tal y como el array contactos era poblado con todos los contactos que los sensores detectaban con los bordes de la carretera el mismo también será poblado con todos los contactos que existan con otros vehículos
+    for (let i = 0; i < trafico.length; i++) {
+      const poligono = trafico[i].poligono;
+      for (let j = 0; j < poligono.length; j++) {
+        const value = obtenerInterseccion(ray[0], ray[1], poligono[j], poligono[(j + 1) % poligono.length]);
+        if (value) {
+          contactos.push(value);
+        }
       }
     }
 
