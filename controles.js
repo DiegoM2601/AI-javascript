@@ -1,11 +1,21 @@
 class Controls {
-  constructor() {
+  constructor(tipo) {
     this.adelante = false;
     this.izquierda = false;
     this.derecha = false;
     this.reversa = false;
 
-    this.#addKeyboardListeners();
+    switch (tipo) {
+      case "CONTROL":
+        this.#addKeyboardListeners();
+        break;
+      case "ESTATICO":
+        // ! El carro que simula el tráfico conducirá hacia adelante de forma perpetua por defecto
+        this.adelante = true;
+        break;
+    }
+
+    // this.#addKeyboardListeners();
   }
 
   /**

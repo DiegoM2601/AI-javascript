@@ -22,3 +22,15 @@ function obtenerInterseccion(A, B, C, D) {
 
   return null;
 }
+
+function interseccionPoligono(poligono1, poligono2) {
+  for (let i = 0; i < poligono1.length; i++) {
+    for (let j = 0; j < poligono2.length; j++) {
+      const touch = obtenerInterseccion(poligono1[i], poligono1[(i + 1) % poligono1.length], poligono2[j], poligono2[(j + 1) % poligono2.length]);
+      if (touch) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

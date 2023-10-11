@@ -1,6 +1,6 @@
 class Car {
   //100, 100, 30, 50
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, tipoControl, velocidadMaxima = 3) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -8,17 +8,61 @@ class Car {
 
     this.velocidad = 0;
     this.aceleracion = 0.2;
-    this.velocidadMax = 3;
+    this.velocidadMax = velocidadMaxima;
     this.friccion = 0.05;
     this.angulo = 0;
+    this.accidentado = false;
 
     this.sensor = new Sensor(this);
-    this.controls = new Controls();
+    this.controls = new Controls(tipoControl);
   }
 
   actualizar(bordesCamino) {
-    this.#mover();
+    //! impedir que el vehículo siga desplazándose después de haber colisionado
+    if (!this.accidentado) {
+      this.#mover();
+      this.poligono = this.#crearPoligono();
+      this.accidentado = this.#evaluarAccidente(bordesCamino);
+    }
     this.sensor.actualizar(bordesCamino);
+  }
+
+  #evaluarAccidente(bordesCamino) {
+    for (let i = 0; i < bordesCamino.length; i++) {
+      if (interseccionPoligono(this.poligono, bordesCamino[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  #crearPoligono() {
+    const puntos = [];
+
+    //obtener la hipotenusa del triangulo rectangulo y el radio entre el punto origen y el vertice
+    const rad = Math.hypot(this.width, this.height) / 2;
+
+    //obtener el ángulo del segmento presente entre el punto origen y el vértice a través del arco tangente del rectángulo
+    const alfa = Math.atan2(this.width, this.height);
+
+    puntos.push({
+      x: this.x - Math.sin(this.angulo - alfa) * rad,
+      y: this.y - Math.cos(this.angulo - alfa) * rad,
+    });
+    puntos.push({
+      x: this.x - Math.sin(this.angulo + alfa) * rad,
+      y: this.y - Math.cos(this.angulo + alfa) * rad,
+    });
+    puntos.push({
+      x: this.x - Math.sin(Math.PI + this.angulo - alfa) * rad,
+      y: this.y - Math.cos(Math.PI + this.angulo - alfa) * rad,
+    });
+    puntos.push({
+      x: this.x - Math.sin(Math.PI + this.angulo + alfa) * rad,
+      y: this.y - Math.cos(Math.PI + this.angulo + alfa) * rad,
+    });
+
+    return puntos;
   }
 
   #mover() {
@@ -84,24 +128,21 @@ class Car {
     // this.y -= this.velocidad;
   }
 
+  //FIXME: la propiedad poligono no se incluye en el constructor de la presente clase ?????
   dibujar(ctx) {
-    //animar la rotación del vehículo
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(-this.angulo);
+    if (this.accidentado) {
+      ctx.fillStyle = "gray";
+    } else {
+      ctx.fillStyle = "black";
+    }
+
     ctx.beginPath();
+    ctx.moveTo(this.poligono[0].x, this.poligono[0].y);
 
-    //prettier-ignore
-    ctx.rect(
-      -this.width / 2, 
-      -this.height / 2,
-      this.width,
-      this.height
-    );
-
+    for (let i = 1; i < this.poligono.length; i++) {
+      ctx.lineTo(this.poligono[i].x, this.poligono[i].y);
+    }
     ctx.fill();
-
-    ctx.restore();
 
     // el vehículo tendrá la responsabilidad de dibujar sus propios sensores
     this.sensor.dibujar(ctx);
