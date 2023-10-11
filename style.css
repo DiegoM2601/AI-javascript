@@ -5,6 +5,10 @@ body {
   text-align: center;
 }
 
+#redNeuronalCanvas {
+  background: black;
+}
+
 #miLienzo {
   background: lightgray;
 }

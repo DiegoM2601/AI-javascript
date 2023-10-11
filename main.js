@@ -8,7 +8,9 @@ const camino = new Road(lienzo.width / 2, lienzo.width * 0.9);
 // const carro = new Car(100, 100, 30, 50);
 //! El constructor de la clase Carro contará con 2 parámetros adicionales el primero servirá para establecer qué instancia especificamente será controlada por el usuario a través de las teclas de dirección y qué instancia conducirá de forma autónoma sobre el lienzo
 //! el segundo parámetro servirá para establecer la velocidad máxima del vehículo, en caso de que el mismo no reciba nada, la velocidad máxima siempre será 3
-const carro = new Car(camino.obtenerCentroCarril(1), 100, 30, 50, "CONTROL");
+
+//! el cuarto parámetro pasa de "CONTROL" a "AI" para ceder el control del vehículo a la red neuronal
+const carro = new Car(camino.obtenerCentroCarril(1), 100, 30, 50, "AI");
 
 //carros que simulen el tráfico en la carretera
 const trafico = [new Car(camino.obtenerCentroCarril(1), -100, 30, 50, "TRAFICO", 2)];

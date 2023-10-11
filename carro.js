@@ -13,6 +13,8 @@ class Car {
     this.angulo = 0;
     this.accidentado = false;
 
+    this.usarCerebro = tipoControl == "AI";
+
     //desactivar sensores laser en caso de que el vehiculo sea autonomo
     if (tipoControl != "TRAFICO") {
       this.sensor = new Sensor(this);
@@ -47,7 +49,18 @@ class Car {
       const offsets = this.sensor.lecturas.map((s) => (s == null ? 0 : 1 - s.offset));
 
       const salidas = NeuralNetwork.feedForward(offsets, this.cerebro);
-      console.log(salidas);
+
+      // ! DEBUG
+      // console.log(salidas);
+
+      // ! ceder el control a los valores de salida emitidos por la red neuronal
+      if (this.usarCerebro) {
+        // * si la salida es por ejemplo [1, 1, 0, 1] no habrá movimiento puesto a pesar de que el vehículo debería desplazarse hacia la izquierda, sin embargo, adelante y atrás se anulan entre sí y si no hay aceleración, si no hay desplazamiento vertical no nay rotación
+        this.controls.adelante = salidas[0];
+        this.controls.izquierda = salidas[1];
+        this.controls.derecha = salidas[2];
+        this.controls.reversa = salidas[3];
+      }
     }
   }
 
