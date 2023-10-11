@@ -21,11 +21,23 @@ const camino = new Road(lienzoCarro.width / 2, lienzoCarro.width * 0.9);
  */
 const N = 100;
 const carros = generarCarros(N);
+let mejorCarro = carros[0];
+if (localStorage.getItem("mejorCerebro")) {
+  mejorCarro.cerebro = JSON.parse(localStorage.getItem("mejorCerebro"));
+}
 
 //carros que simulen el tráfico en la carretera
 const trafico = [new Car(camino.obtenerCentroCarril(1), -100, 30, 50, "TRAFICO", 2)];
 
 animar();
+
+//! almacenar el desempeño neuronal del mejor carro
+function guardar() {
+  localStorage.setItem("mejorCerebro", JSON.stringify(mejorCarro.cerebro));
+}
+function descartar() {
+  localStorage.removeItem("mejorCerebro");
+}
 
 function generarCarros(N) {
   const carros = [];
@@ -50,7 +62,7 @@ function animar(time) {
    * ! Tomando en cuenta que el lienzo se desempeña en un plano cartesiano invertido aquel vehículo cuya coordenada y sea la más reducida implicará que se haya más arriba en el lienzo, es decir, más adelante en el camino. Por otra parte aquel carro cuya coordenada en y sea mayor implicará que el mismo se halla más atrás en el camino, o bien está avanzando en reversa o bien se ha detenida por alguna razón.
    */
   //prettier-ingore
-  const mejorCarro = carros.find(
+  mejorCarro = carros.find(
     //hallar el carro con la coordenada y más pequeña y compararla un array de todos los carros compuestos únicamente por sus coordenadas en el eje y
     (c) => c.y == Math.min(...carros.map((c) => c.y))
   );
