@@ -171,7 +171,7 @@ class Car {
   }
 
   //FIXME: la propiedad poligono no se incluye en el constructor de la presente clase ?????
-  dibujar(ctx, color) {
+  dibujar(ctx, color, dibujarSensor = false) {
     if (this.accidentado) {
       ctx.fillStyle = "gray";
     } else {
@@ -186,7 +186,7 @@ class Car {
     }
     ctx.fill();
 
-    if (this.sensor) {
+    if (this.sensor && dibujarSensor) {
       // el vehículo tendrá la responsabilidad de dibujar sus propios sensores
       this.sensor.dibujar(ctx);
     }
