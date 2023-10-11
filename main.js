@@ -45,13 +45,23 @@ function animar(time) {
     carros[i].actualizar(camino.bordes, trafico);
   }
 
+  /**
+   * ! encontrar la mejor simulacion, es decir, aquel que cuente con la coordenada y más pequeña
+   * ! Tomando en cuenta que el lienzo se desempeña en un plano cartesiano invertido aquel vehículo cuya coordenada y sea la más reducida implicará que se haya más arriba en el lienzo, es decir, más adelante en el camino. Por otra parte aquel carro cuya coordenada en y sea mayor implicará que el mismo se halla más atrás en el camino, o bien está avanzando en reversa o bien se ha detenida por alguna razón.
+   */
+  //prettier-ingore
+  const mejorCarro = carros.find(
+    //hallar el carro con la coordenada y más pequeña y compararla un array de todos los carros compuestos únicamente por sus coordenadas en el eje y
+    (c) => c.y == Math.min(...carros.map((c) => c.y))
+  );
+
   lienzoCarro.height = window.innerHeight;
   lienzoRedNeuronal.height = window.innerHeight;
 
   ctxCarro.save();
 
   //! desplazamiento en tiempo real del lienzo y del punto origen sincronizado al desplazamiento del vehículo
-  ctxCarro.translate(0, -carros[0].y + lienzoCarro.height * 0.7);
+  ctxCarro.translate(0, -mejorCarro.y + lienzoCarro.height * 0.7);
 
   camino.dibujar(ctxCarro);
   for (let i = 0; i < trafico.length; i++) {
@@ -63,13 +73,13 @@ function animar(time) {
     carros[i].dibujar(ctxCarro, "blue");
   }
   ctxCarro.globalAlpha = 1;
-  carros[0].dibujar(ctxCarro, "blue", true);
+  mejorCarro.dibujar(ctxCarro, "blue", true);
 
   ctxCarro.restore();
 
   //animar visualizador mediante el argumento time el cual es provisto a través del método requestAnimationFrame
   ctxRed.lineDashOffset = -time / 50;
-  Visualizer.drawNetwork(ctxRed, carros[0].cerebro);
+  Visualizer.drawNetwork(ctxRed, mejorCarro.cerebro);
 
   requestAnimationFrame(animar);
 }
