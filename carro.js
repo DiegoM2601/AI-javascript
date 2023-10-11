@@ -16,6 +16,14 @@ class Car {
     //desactivar sensores laser en caso de que el vehiculo sea autonomo
     if (tipoControl != "TRAFICO") {
       this.sensor = new Sensor(this);
+
+      /**
+       * un array con 3 datos fundamentales
+       * - el número de sensores láser
+       * - el número de neuronas en la capa oculta
+       * - el número de neuronas en la capa de salida (4 correspondiente a las 4 direcciones a las que se puede desplazar el vehículo)
+       */
+      this.cerebro = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
     this.controls = new Controls(tipoControl);
   }
@@ -30,6 +38,16 @@ class Car {
 
     if (this.sensor) {
       this.sensor.actualizar(bordesCamino, trafico);
+
+      //offset: distancia entre el punt origen del vehículo y el borde de colisión
+      //las lecturas realizadas por el sensor cuenta con una coordeanda x,y el offset
+      // 0 no hay lecturas
+      // valores reducidos en caso de que el objeto de colisión se halle lejos del vehículo
+      // valores altos cercanos a 1 en caso de que el objeto de colisión se halle cerca
+      const offsets = this.sensor.lecturas.map((s) => (s == null ? 0 : 1 - s.offset));
+
+      const salidas = NeuralNetwork.feedForward(offsets, this.cerebro);
+      console.log(salidas);
     }
   }
 
