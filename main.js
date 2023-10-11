@@ -23,11 +23,18 @@ const N = 100;
 const carros = generarCarros(N);
 let mejorCarro = carros[0];
 if (localStorage.getItem("mejorCerebro")) {
-  mejorCarro.cerebro = JSON.parse(localStorage.getItem("mejorCerebro"));
+  for (let i = 0; i < carros.length; i++) {
+    carros[i].cerebro = JSON.parse(localStorage.getItem("mejorCerebro"));
+  }
 }
 
 //carros que simulen el tráfico en la carretera
-const trafico = [new Car(camino.obtenerCentroCarril(1), -100, 30, 50, "TRAFICO", 2)];
+//prettier-ingore
+const trafico = [
+  new Car(camino.obtenerCentroCarril(1), -100, 30, 50, "TRAFICO", 2),
+  new Car(camino.obtenerCentroCarril(0), -300, 30, 50, "TRAFICO", 2),
+  new Car(camino.obtenerCentroCarril(2), -300, 30, 50, "TRAFICO", 2),
+];
 
 animar();
 

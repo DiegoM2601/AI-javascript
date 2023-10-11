@@ -21,6 +21,28 @@ class NeuralNetwork {
     // ! las salidas finales dictarán si el vehículo debe ir hacia adelante, hacia atrás, izquierda o derecha
     return salidas;
   }
+
+  //prettier-ignore
+  static mutar(network,amount=1){
+    network.niveles.forEach(level => {
+        for(let i=0;i<level.biases.length;i++){
+            level.biases[i]=interpolacionLineal(
+                level.biases[i],
+                Math.random()*2-1,
+                amount
+            )
+        }
+        for(let i=0;i<level.pesos.length;i++){
+            for(let j=0;j<level.pesos[i].length;j++){
+                level.pesos[i][j]=interpolacionLineal(
+                    level.pesos[i][j],
+                    Math.random()*2-1,
+                    amount
+                )
+            }
+        }
+    });
+}
 }
 
 class Nivel {
