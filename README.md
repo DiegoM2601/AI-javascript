@@ -8,6 +8,6 @@ Esto con el objetivo de almacenar los valores generados por la red neuronal dent
 Después de múltiples intento se ha conseguido una red neuronal que logra desempeñarse de forma correcta esquivando los obstáculos y enderezarse adoptando un nuevo carril de forma automática. La composición de la red neuronal podrá hallarse en el directorio raíz del proyecto con el nombre de mejor-red-neuronal.txt. 
 Para implementar la misma será necesario almacenar una simulación al azar en el navegador web a objeto de que la siguiente variable sea visible en las herramientas de desarrollador. 
 
-![[firefox_HEjfXfb4F8.png]]
+![Devtools](img/devtools.png)
 
 La variable local fue bautizada con el nombre de "mejorCerebro" y a continuación será necesario abrir el archivo mejor-red-neuronal.txt copiar todo el contenido presente en este archivo y reemplazar el valor de la variable en el navegador. Tras esto será pertinente reiniciar la simulación y la misma empezará a tomar como referencia la red neuronal almacenada localmente. 
