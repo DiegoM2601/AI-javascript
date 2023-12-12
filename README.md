@@ -1,4 +1,7 @@
 # Despliegue
+
+[REPOSITORIO EN GITHUB DEL PROYECTO](https://github.com/DiegoM2601/AI-javascript)
+
 Al tratarse de un ensayo web sencillo en esencia, el cual solo utiliza JavaScript, HTML y CSS solo basta con abrir el archivo index.html en un navegador web a objeto de ejecutar la simulación. Es importante mencionar que tampoco es necesario que el ordenador se halle conectado a internet, tal y como se mencionó en múltiples ocasiones durante las múltiples presentaciones, el ensayo no está utilizando absolutamente ninguna herramienta externa, librería o Framwork; **todo se ha desarrollado desde cero.**
 La simulación se ejecutará ni bien el navegador abra el archivo index.html, a objeto de repetir la simulación y obtener nuevos resultados será necesario recargar la página, esto a través del botón respectivo o a través del comando Ctrl + R dentro del entorno Windows. La interfaz en cuestión cuenta con únicamente 2 botones, cuando una de la simulaciones se halla ejecutado de forma satisfactoria será pertinente pulsar el siguiente botón: 
 
